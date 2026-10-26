@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Admin overview')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <h1 class="page-title">Admin panel</h1>
+    <div th:replace="~{fragments :: adminNav('dashboard')}"></div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg"><div class="stat-card"><div class="num" th:text="${customerCount}">0</div><div class="lbl">Customers</div></div></div>
+        <div class="col-6 col-lg"><div class="stat-card turmeric"><div class="num" th:text="${artisanCount}">0</div><div class="lbl">Artisans</div></div></div>
+        <div class="col-6 col-lg"><div class="stat-card"><div class="num" th:text="${productCount}">0</div><div class="lbl">Live products</div></div></div>
+        <div class="col-6 col-lg"><div class="stat-card madder"><div class="num" th:text="${orderCount}">0</div><div class="lbl">Orders</div></div></div>
+        <div class="col-12 col-lg"><div class="stat-card"><div class="num" th:text="${@fmt.money(revenue)}">Rs 0</div><div class="lbl">Sales value (excl. cancelled)</div></div></div>
+    </div>
+
+    <h2 class="h5 mb-3">Latest orders</h2>
+    <div class="panel p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th></tr></thead>
+                <tbody>
+                <tr th:each="o : ${recentOrders}">
+                    <td th:text="'#' + ${o.id}">#1</td>
+                    <td th:text="${o.customer.name}">Customer</td>
+                    <td th:text="${#temporals.format(o.orderDate, 'dd MMM yyyy, hh:mm a')}">Date</td>
+                    <td th:text="${@fmt.money(o.totalAmount)}">Rs 0.00</td>
+                    <td><span class="badge" th:classappend="${o.status.badgeClass}" th:text="${o.status.label}">Placed</span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentOrders)}"><td colspan="5" class="text-center text-muted py-4">No orders yet.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

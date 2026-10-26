@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Users')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <h1 class="page-title">Users</h1>
+    <div th:replace="~{fragments :: adminNav('users')}"></div>
+
+    <div class="panel p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Region</th><th>Status</th><th class="text-end">Action</th></tr></thead>
+                <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.name}">Name</td>
+                    <td th:text="${u.email}">email</td>
+                    <td><span class="badge bg-dark" th:text="${u.role}">ROLE</span></td>
+                    <td th:text="${u.region != null ? u.region : '-'}">-</td>
+                    <td>
+                        <span class="badge bg-success" th:if="${u.enabled}">Active</span>
+                        <span class="badge bg-secondary" th:unless="${u.enabled}">Disabled</span>
+                    </td>
+                    <td class="text-end">
+                        <form th:if="${u.role.name() != 'ADMIN'}" th:action="@{/admin/users/{id}/toggle(id=${u.id})}" method="post">
+                            <button type="submit" class="btn btn-sm"
+                                    th:classappend="${u.enabled} ? 'btn-outline-danger' : 'btn-outline-success'"
+                                    th:text="${u.enabled} ? 'Disable' : 'Enable'">Disable</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

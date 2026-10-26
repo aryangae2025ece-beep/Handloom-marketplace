@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('My studio')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 class="page-title mb-0">My studio</h1>
+        <a class="btn btn-madder" th:href="@{/artisan/products/new}"><i class="bi bi-plus-lg"></i> Add product</a>
+    </div>
+    <div th:replace="~{fragments :: artisanNav('dashboard')}"></div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="stat-card"><div class="num" th:text="${#lists.size(products)}">0</div><div class="lbl">Products live</div></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card turmeric"><div class="num" th:text="${orderCount}">0</div><div class="lbl">Items ordered</div></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card madder"><div class="num" th:text="${pendingCount}">0</div><div class="lbl">Waiting to ship</div></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card"><div class="num" th:text="${@fmt.money(revenue)}">Rs 0</div><div class="lbl">Sales value</div></div></div>
+    </div>
+
+    <div class="panel text-center py-5" th:if="${#lists.isEmpty(products)}">
+        <h2 class="h4">You have not listed anything yet</h2>
+        <p class="text-muted">Add your first product with a photo, a price and the story behind it.</p>
+        <a class="btn btn-madder" th:href="@{/artisan/products/new}">Add your first product</a>
+    </div>
+
+    <div class="panel p-0" th:unless="${#lists.isEmpty(products)}">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th class="text-end">Actions</th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${products}">
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            <img class="thumb" th:src="@{${p.imageUrl}}" alt="">
+                            <a th:href="@{/products/{id}(id=${p.id})}" th:text="${p.name}">Product</a>
+                        </div>
+                    </td>
+                    <td th:text="${p.category.name}">Category</td>
+                    <td th:text="${@fmt.money(p.price)}">Rs 0.00</td>
+                    <td>
+                        <span th:text="${p.stock}">0</span>
+                        <span class="badge bg-warning text-dark ms-1" th:if="${p.stock gt 0 and p.stock le 3}">Low</span>
+                        <span class="badge bg-secondary ms-1" th:if="${p.stock == 0}">Sold out</span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-1">
+                            <a class="btn btn-sm btn-outline-indigo" th:href="@{/artisan/products/{id}/edit(id=${p.id})}"><i class="bi bi-pencil"></i> Edit</a>
+                            <form th:action="@{/artisan/products/{id}/delete(id=${p.id})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Remove this product from the marketplace?')"><i class="bi bi-trash"></i> Remove</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,134 @@
+/* Kaithari - handloom & artisan marketplace
+   Palette: indigo (dye), madder red, turmeric, linen */
+:root {
+  --indigo: #1E2A5E;
+  --indigo-dark: #141D45;
+  --madder: #B23A32;
+  --madder-dark: #8F2C26;
+  --turmeric: #E0A526;
+  --linen: #F5F2EC;
+  --paper: #FFFFFF;
+  --ink: #1F1F24;
+  --muted: #6B6B76;
+  --line: #E2DDD2;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--linen);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main { flex: 1; }
+h1, h2, h3, h4, .brand-font { font-family: 'Fraunces', Georgia, serif; font-weight: 600; letter-spacing: -.01em; }
+a { color: var(--indigo); }
+a:hover { color: var(--madder); }
+
+/* ---------- navbar ---------- */
+.navbar-kaithari { background: var(--indigo); padding: .6rem 0; }
+.navbar-kaithari .navbar-brand { color: #fff; font-family: 'Fraunces', Georgia, serif; font-size: 1.7rem; font-weight: 700; }
+.navbar-kaithari .navbar-brand small { display: block; font-family: 'DM Sans', sans-serif; font-size: .62rem; font-weight: 400; color: #C9CEE6; margin-top: -6px; }
+.navbar-kaithari .nav-link { color: #E4E7F5; font-weight: 500; }
+.navbar-kaithari .nav-link:hover, .navbar-kaithari .nav-link:focus { color: var(--turmeric); }
+.navbar-kaithari .navbar-toggler { border-color: #ffffff55; }
+.navbar-kaithari .navbar-toggler-icon { filter: invert(1); }
+.navbar-kaithari .form-control { border: 0; }
+.weave-border {
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--madder) 0 16px, var(--turmeric) 16px 24px, var(--indigo-dark) 24px 40px, #fff 40px 44px);
+}
+
+/* ---------- buttons ---------- */
+.btn { border-radius: 4px; font-weight: 600; }
+.btn-indigo { background: var(--indigo); border: 1px solid var(--indigo); color: #fff; }
+.btn-indigo:hover { background: var(--indigo-dark); color: #fff; }
+.btn-madder { background: var(--madder); border: 1px solid var(--madder); color: #fff; }
+.btn-madder:hover { background: var(--madder-dark); border-color: var(--madder-dark); color: #fff; }
+.btn-turmeric { background: var(--turmeric); border: 1px solid var(--turmeric); color: #1b1b1b; }
+.btn-turmeric:hover { background: #c9931c; color: #1b1b1b; }
+.btn-outline-indigo { border: 1px solid var(--indigo); color: var(--indigo); background: transparent; }
+.btn-outline-indigo:hover { background: var(--indigo); color: #fff; }
+:focus-visible { outline: 3px solid var(--turmeric); outline-offset: 2px; }
+
+/* ---------- hero: a woven check (kattam) with the message on a "label" ---------- */
+.hero {
+  background-color: var(--indigo);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.09) 0 18px, transparent 18px 36px),
+    repeating-linear-gradient(90deg, rgba(178,58,50,.55) 0 18px, transparent 18px 36px),
+    repeating-linear-gradient(90deg, rgba(224,165,38,.35) 0 3px, transparent 3px 72px);
+  padding: 4.5rem 0;
+}
+.hero-card {
+  background: var(--linen);
+  max-width: 640px;
+  padding: 2.5rem 2.5rem 2.25rem;
+  border-left: 8px solid var(--madder);
+  box-shadow: 10px 10px 0 rgba(20,29,69,.55);
+}
+.hero-card h1 { font-size: clamp(2rem, 4.4vw, 3rem); line-height: 1.1; margin-bottom: 1rem; }
+.hero-card p { color: #45454f; font-size: 1.05rem; max-width: 52ch; }
+
+/* ---------- sections ---------- */
+.section-title { font-size: 1.8rem; margin-bottom: .25rem; }
+.section-sub { color: var(--muted); margin-bottom: 1.5rem; }
+.page-title { font-size: 2rem; margin-bottom: 1.25rem; }
+
+.category-tile {
+  display: flex; align-items: center; gap: .75rem;
+  background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--indigo);
+  padding: .9rem 1rem; text-decoration: none; color: var(--ink); font-weight: 600; height: 100%;
+}
+.category-tile i { font-size: 1.5rem; color: var(--madder); }
+.category-tile:hover { border-left-color: var(--madder); color: var(--indigo); background: #FCFBF8; }
+
+.value-item i { font-size: 1.8rem; color: var(--madder); }
+
+/* ---------- product cards ---------- */
+.product-card { border: 1px solid var(--line); border-radius: 4px; background: var(--paper); overflow: hidden; }
+.product-card .card-img-top { aspect-ratio: 1 / 1; object-fit: cover; background: #E7E1D3; }
+.product-card .craft { font-size: .75rem; color: var(--madder); font-weight: 600; }
+.product-card .card-title { font-size: 1.02rem; line-height: 1.3; }
+.product-card .card-title a { color: var(--ink); text-decoration: none; }
+.product-card .card-title a:hover { color: var(--madder); }
+.price { font-weight: 700; color: var(--indigo); font-size: 1.15rem; }
+.stock-low { color: var(--madder); font-size: .8rem; font-weight: 600; }
+
+/* ---------- artisan blocks ---------- */
+.artisan-card { background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--turmeric); padding: 1.25rem; height: 100%; }
+.artisan-avatar {
+  width: 52px; height: 52px; border-radius: 50%; background: var(--indigo); color: #fff;
+  display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-size: 1.4rem; flex: none;
+}
+.story-box { background: var(--paper); border: 1px solid var(--line); border-left: 5px solid var(--turmeric); padding: 1.25rem 1.5rem; }
+.pre-line { white-space: pre-line; }
+
+/* ---------- detail / cart ---------- */
+.detail-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border: 1px solid var(--line); background: #E7E1D3; }
+.thumb { width: 64px; height: 64px; object-fit: cover; border: 1px solid var(--line); background: #E7E1D3; }
+.qty { width: 78px; }
+.summary-card { background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--indigo); padding: 1.25rem; }
+.panel { background: var(--paper); border: 1px solid var(--line); padding: 1.5rem; }
+.table > :not(caption) > * > * { vertical-align: middle; }
+
+/* ---------- dashboards ---------- */
+.stat-card { background: var(--paper); border: 1px solid var(--line); border-left: 5px solid var(--indigo); padding: 1rem 1.25rem; height: 100%; }
+.stat-card .num { font-family: 'Fraunces', serif; font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
+.stat-card .lbl { color: var(--muted); font-size: .85rem; }
+.stat-card.madder { border-left-color: var(--madder); }
+.stat-card.turmeric { border-left-color: var(--turmeric); }
+.subnav .nav-link { color: var(--indigo); font-weight: 600; border-radius: 4px; }
+.subnav .nav-link.active { background: var(--indigo); color: #fff; }
+
+/* ---------- auth ---------- */
+.auth-wrap { max-width: 520px; margin: 0 auto; }
+
+/* ---------- footer ---------- */
+.site-footer { background: var(--indigo-dark); color: #C9CEE6; margin-top: 4rem; }
+.site-footer a { color: #fff; text-decoration: none; }
+.site-footer a:hover { color: var(--turmeric); }
+.site-footer .brand-font { color: #fff; font-size: 1.4rem; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

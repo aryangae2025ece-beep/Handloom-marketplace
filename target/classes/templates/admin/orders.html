@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('All orders')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <h1 class="page-title">Orders</h1>
+    <div th:replace="~{fragments :: adminNav('orders')}"></div>
+
+    <div class="panel text-center py-5" th:if="${#lists.isEmpty(orders)}">No orders have been placed yet.</div>
+
+    <div class="panel p-0" th:unless="${#lists.isEmpty(orders)}">
+        <div class="table-responsive">
+            <table class="table mb-0 align-middle">
+                <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Change status</th></tr></thead>
+                <tbody>
+                <tr th:each="o : ${orders}">
+                    <td>
+                        <div class="fw-semibold" th:text="'#' + ${o.id}">#1</div>
+                        <div class="small text-muted" th:text="${#temporals.format(o.orderDate, 'dd MMM yyyy')}">Date</div>
+                    </td>
+                    <td class="small">
+                        <div th:text="${o.customer.name}">Customer</div>
+                        <div class="text-muted" th:text="${o.shippingAddress}">Address</div>
+                    </td>
+                    <td class="small">
+                        <div th:each="it : ${o.items}" th:text="${it.productName} + ' x ' + ${it.quantity}">Product x 1</div>
+                    </td>
+                    <td th:text="${@fmt.money(o.totalAmount)}">Rs 0.00</td>
+                    <td class="small"><span th:text="${o.paymentMethod}">COD</span><br><span class="text-muted" th:text="${o.paymentStatus}">status</span></td>
+                    <td><span class="badge" th:classappend="${o.status.badgeClass}" th:text="${o.status.label}">Placed</span></td>
+                    <td>
+                        <form th:if="${o.status.name() != 'CANCELLED'}" th:action="@{/admin/orders/{id}/status(id=${o.id})}" method="post" class="d-flex gap-1">
+                            <label class="visually-hidden" th:for="'os' + ${o.id}">New status</label>
+                            <select th:id="'os' + ${o.id}" name="status" class="form-select form-select-sm">
+                                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.label}" th:selected="${s == o.status}">Placed</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-indigo">Save</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

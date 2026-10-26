@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head(${artisan.name})}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <div class="story-box mb-4">
+        <div class="d-flex align-items-center gap-3 mb-2">
+            <div class="artisan-avatar" th:text="${#strings.substring(artisan.name, 0, 1)}">A</div>
+            <div>
+                <h1 class="h3 mb-0" th:text="${artisan.name}">Artisan</h1>
+                <div class="text-muted" th:if="${artisan.region != null}"><i class="bi bi-geo-alt"></i> <span th:text="${artisan.region}">Region</span></div>
+            </div>
+        </div>
+        <p class="mb-0 pre-line" th:if="${artisan.bio != null}" th:text="${artisan.bio}">Story</p>
+    </div>
+
+    <h2 class="section-title mb-3">Products by <span th:text="${artisan.name}">artisan</span></h2>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" th:unless="${#lists.isEmpty(products)}">
+        <th:block th:each="p : ${products}">
+            <div th:replace="~{fragments :: productCard(${p})}"></div>
+        </th:block>
+    </div>
+    <div class="panel text-center" th:if="${#lists.isEmpty(products)}">This artisan has no products listed right now.</div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

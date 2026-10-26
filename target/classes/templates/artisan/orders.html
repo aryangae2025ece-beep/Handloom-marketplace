@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Orders to fulfil')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <h1 class="page-title">Orders to fulfil</h1>
+    <div th:replace="~{fragments :: artisanNav('orders')}"></div>
+
+    <div class="panel text-center py-5" th:if="${#lists.isEmpty(items)}">
+        <h2 class="h4">No orders yet</h2>
+        <p class="text-muted mb-0">When a customer buys one of your products, it appears here with the delivery address.</p>
+    </div>
+
+    <div class="panel p-0" th:unless="${#lists.isEmpty(items)}">
+        <div class="table-responsive">
+            <table class="table mb-0 align-middle">
+                <thead>
+                <tr><th>Order</th><th>Item</th><th>Customer and delivery</th><th>Amount</th><th>Status</th><th>Update</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="it : ${items}">
+                    <td>
+                        <div class="fw-semibold" th:text="'#' + ${it.customerOrder.id}">#1</div>
+                        <div class="small text-muted" th:text="${#temporals.format(it.customerOrder.orderDate, 'dd MMM yyyy')}">Date</div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <img class="thumb" style="width:44px;height:44px" th:src="@{${it.product.imageUrl}}" alt="">
+                            <div>
+                                <div th:text="${it.productName}">Product</div>
+                                <div class="small text-muted" th:text="'Quantity: ' + ${it.quantity}">Quantity: 1</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="small">
+                        <div class="fw-semibold" th:text="${it.customerOrder.customer.name}">Customer</div>
+                        <div th:if="${it.customerOrder.phone != null}"><i class="bi bi-telephone"></i> <span th:text="${it.customerOrder.phone}">Phone</span></div>
+                        <div class="text-muted" th:text="${it.customerOrder.shippingAddress}">Address</div>
+                        <div class="text-muted" th:text="'Payment: ' + ${it.customerOrder.paymentMethod} + ' (' + ${it.customerOrder.paymentStatus} + ')'">Payment</div>
+                    </td>
+                    <td class="fw-semibold" th:text="${@fmt.money(it.subtotal)}">Rs 0.00</td>
+                    <td><span class="badge" th:classappend="${it.status.badgeClass}" th:text="${it.status.label}">Placed</span></td>
+                    <td>
+                        <form th:if="${it.status.name() == 'PLACED' or it.status.name() == 'SHIPPED'}"
+                              th:action="@{/artisan/orders/items/{id}/status(id=${it.id})}" method="post" class="d-flex gap-1">
+                            <label class="visually-hidden" th:for="'st' + ${it.id}">New status</label>
+                            <select th:id="'st' + ${it.id}" name="status" class="form-select form-select-sm">
+                                <option value="SHIPPED" th:selected="${it.status.name() == 'PLACED'}" th:if="${it.status.name() == 'PLACED'}">Mark shipped</option>
+                                <option value="DELIVERED">Mark delivered</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-indigo">Save</button>
+                        </form>
+                        <span class="small text-muted" th:if="${it.status.name() == 'DELIVERED'}">Completed</span>
+                        <span class="small text-muted" th:if="${it.status.name() == 'CANCELLED'}">Cancelled by customer</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

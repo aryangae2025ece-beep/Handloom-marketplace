@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Something went wrong')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-5">
+    <div class="panel text-center py-5">
+        <div class="display-4 brand-font" th:text="${status != null ? status : 'Error'}">404</div>
+        <h1 class="h4 mt-2">
+            <span th:if="${status == 404}">We could not find that page</span>
+            <span th:if="${status == 403}">You do not have access to this page</span>
+            <span th:if="${status != 404 and status != 403}">Something went wrong on our side</span>
+        </h1>
+        <p class="text-muted">Check the address, or go back and try again.</p>
+        <a class="btn btn-indigo" th:href="@{/}">Back to the home page</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

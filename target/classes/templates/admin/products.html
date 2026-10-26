@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('All products')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <h1 class="page-title">Products</h1>
+    <div th:replace="~{fragments :: adminNav('products')}"></div>
+
+    <div class="panel p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead><tr><th>Product</th><th>Artisan</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th class="text-end">Action</th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${products}">
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <img class="thumb" style="width:44px;height:44px" th:src="@{${p.imageUrl}}" alt="">
+                            <span th:text="${p.name}">Product</span>
+                        </div>
+                    </td>
+                    <td th:text="${p.artisan.name}">Artisan</td>
+                    <td th:text="${p.category.name}">Category</td>
+                    <td th:text="${@fmt.money(p.price)}">Rs 0.00</td>
+                    <td th:text="${p.stock}">0</td>
+                    <td>
+                        <span class="badge bg-success" th:if="${p.active}">Live</span>
+                        <span class="badge bg-secondary" th:unless="${p.active}">Hidden</span>
+                    </td>
+                    <td class="text-end">
+                        <form th:action="@{/admin/products/{id}/toggle(id=${p.id})}" method="post">
+                            <input type="hidden" name="active" th:value="${!p.active}">
+                            <button type="submit" class="btn btn-sm"
+                                    th:classappend="${p.active} ? 'btn-outline-danger' : 'btn-outline-success'"
+                                    th:text="${p.active} ? 'Hide' : 'Show'">Hide</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

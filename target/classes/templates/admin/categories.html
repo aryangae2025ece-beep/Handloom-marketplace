@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Categories')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <h1 class="page-title">Categories</h1>
+    <div th:replace="~{fragments :: adminNav('categories')}"></div>
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <form class="panel" th:action="@{/admin/categories}" method="post">
+                <h2 class="h5 mb-3">Add a category</h2>
+                <label class="form-label" for="name">Category name</label>
+                <input class="form-control mb-3" type="text" id="name" name="name" required maxlength="80" placeholder="e.g. Woodcraft">
+                <button type="submit" class="btn btn-madder">Add category</button>
+            </form>
+        </div>
+        <div class="col-md-7">
+            <div class="panel p-0">
+                <table class="table mb-0">
+                    <thead><tr><th>Name</th><th class="text-end">Action</th></tr></thead>
+                    <tbody>
+                    <tr th:each="c : ${categories}">
+                        <td><i th:class="'bi ' + ${c.icon} + ' me-2 text-danger'"></i><span th:text="${c.name}">Category</span></td>
+                        <td class="text-end">
+                            <form th:action="@{/admin/categories/{id}/delete(id=${c.id})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Delete this category?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

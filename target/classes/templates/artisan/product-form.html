@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Product')}"></head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+
+<main class="container py-4">
+    <h1 class="page-title" th:text="${productForm.id == null} ? 'Add a product' : 'Edit product'">Add a product</h1>
+    <div th:replace="~{fragments :: artisanNav('form')}"></div>
+
+    <form class="panel" th:action="${productForm.id == null} ? @{/artisan/products} : @{/artisan/products/{id}(id=${productForm.id})}"
+          th:object="${productForm}" method="post" enctype="multipart/form-data" novalidate>
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label class="form-label" for="name">Product name</label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'" type="text" id="name" th:field="*{name}">
+                <div class="invalid-feedback" th:errors="*{name}">Name error</div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="categoryId">Category</label>
+                <select class="form-select" th:classappend="${#fields.hasErrors('categoryId')} ? 'is-invalid'" id="categoryId" th:field="*{categoryId}">
+                    <option value="">Choose a category</option>
+                    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}">Category</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{categoryId}">Category error</div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label" for="price">Price (INR)</label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'" type="number" step="0.01" min="1" id="price" th:field="*{price}">
+                <div class="invalid-feedback" th:errors="*{price}">Price error</div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="stock">Units in stock</label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('stock')} ? 'is-invalid'" type="number" min="0" id="stock" th:field="*{stock}">
+                <div class="invalid-feedback" th:errors="*{stock}">Stock error</div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="craftType">Craft or technique</label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('craftType')} ? 'is-invalid'" type="text" id="craftType" th:field="*{craftType}" placeholder="e.g. Kanchipuram silk, Ikat">
+                <div class="invalid-feedback" th:errors="*{craftType}">Craft error</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="region">Region where it is made</label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('region')} ? 'is-invalid'" type="text" id="region" th:field="*{region}" placeholder="Leave empty to use your own region">
+                <div class="invalid-feedback" th:errors="*{region}">Region error</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="image">Photo (PNG, JPG, WEBP, up to 5 MB)</label>
+                <input class="form-control" type="file" id="image" name="image" accept="image/png,image/jpeg,image/gif,image/webp">
+                <div class="mt-2 d-flex align-items-center gap-2" th:if="${productForm.currentImageUrl != null}">
+                    <img class="thumb" th:src="@{${productForm.currentImageUrl}}" alt="Current photo">
+                    <span class="small text-muted">Current photo. Choose a file only if you want to replace it.</span>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label" for="description">Description and story</label>
+                <textarea class="form-control" th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'" id="description" rows="5" th:field="*{description}"
+                          placeholder="Materials, how long it takes to make, size, care instructions..."></textarea>
+                <div class="invalid-feedback" th:errors="*{description}">Description error</div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-madder" th:text="${productForm.id == null} ? 'Publish product' : 'Save changes'">Save</button>
+            <a class="btn btn-outline-secondary" th:href="@{/artisan/dashboard}">Cancel</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>
